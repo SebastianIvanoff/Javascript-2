@@ -1,0 +1,213 @@
+// const BASE_URL = "https://jsonplaceholder.typicode.com/users";
+// const users = [];
+
+// const userList = document.querySelector("#user-list");
+
+// // const getUsers = () => {
+// //   fetch(BASE_URL)
+// //     .then((res) => res.json())
+// //     .then((data) => {
+// //       //console.log(data);
+
+// //       data.forEach((user) => {
+// //         users.push(user);
+// //       });
+
+// //       listUsers();
+// //     });
+
+// //    console.log(users);
+// // };
+
+// const getUsers = async () => {
+//   const res = await fetch(BASE_URL);
+//   const data = await res.json();
+
+//   console.log(data);
+//   data.forEach((user) => {
+//     users.push(user);
+//   });
+//   listUsers();
+// };
+
+// getUsers();
+
+// const listUsers = () => {
+//   userList.innerHTML = ''
+
+//  users.forEach(user => {
+//     const userElement = createUserElement(user)
+//     userList.appendChild(userElement)
+//  })
+// };
+
+// const createElement = (userData) => {
+//   let user = document.createElement("div");
+//  user.id = userData.id
+//   user.classList.add("user");
+//   user.classList.add("user-dark");
+
+//   let name = document.createElement("p");
+//   name.classList.add("username");
+//   name.innerText = userData.name;
+
+//   let company = document.createElement("p");
+//   company.classList.add("user-company");
+//   company.innerText = userData.company.name;
+
+//   let email = document.createElement("p");
+//   email.classList.add("user-email");
+//   email.innerText = userData.email;
+
+//   user.appendChild(name);
+//   user.appendChild(company);
+//   user.appendChild(email);
+
+//   return user;
+// };
+// const removeUser = e => {
+//   if (!e.target.classList.contains("user")) {
+//     console.log("Klickade inte på en div");
+//     return;
+//   }
+
+//   fetch(BASE_URL + e.target.id, {
+//     method: 'DELETE'
+//   })
+//     .then(res => {
+//        console.log(res)
+//        if(res.ok){
+//         e.target.remove()
+//         const index = users.findIndex(user => user.id == e.target.id)
+//         users.splice(index, 1)
+//         console.log(users)}
+//        })
+//     .then((data) => console.log(data));
+// };
+
+// userList.addEventListener("click", removeUser);
+
+
+const BASE_URL = "https://jsonplaceholder.typicode.com/users/"
+const users = []
+
+const userList = document.querySelector('#user-list')
+const form = document.querySelector('#form')
+
+// const getUsers = () => {
+//   fetch(BASE_URL)
+//   .then(res => res.json())
+//   .then(data => {
+    
+//     console.log(data)
+//     data.forEach(user => {
+//       users.push(user)
+//     });
+    
+//     listUsers()
+    
+//   })
+// }
+
+const getUsers = async () => {
+  const res = await fetch(BASE_URL)
+  const data = await res.json()
+
+  console.log(data)
+  data.forEach(user => {
+    users.push(user)
+  })
+  listUsers()
+}
+
+
+getUsers()
+// console.log(users)
+
+const listUsers = () => {
+  userList.innerHTML = ''
+
+  users.forEach(user => {
+    
+    const userElement = createUserElement(user)
+    userList.appendChild(userElement)
+  })
+}
+
+
+const createUserElement = (userData) => {
+  let user = document.createElement('div')
+  user.id = userData.id
+  user.classList.add('user')
+  user.classList.add('user-dark')
+
+  let name = document.createElement('p')
+  name.classList.add('user_name')
+  name.innerText = userData.name
+  
+  let company = document.createElement('p')
+  company.classList.add('user_company')
+  company.innerText = userData.company.name
+
+  let email = document.createElement('p')
+  email.classList.add('user_email')
+  email.innerText = userData.email
+
+  user.appendChild(name)
+  user.appendChild(company)
+  user.appendChild(email)
+
+  return user
+}
+
+const removeUser = e => {
+  if(!e.target.classList.contains('user')){
+    console.log('klickade inte på en div')
+    return
+  }
+
+  fetch(BASE_URL + e.target.id, {
+    method: 'DELETE'
+  })
+    .then(res => {
+      console.log(res)
+      if(res.ok) {
+        e.target.remove()
+        const index = users.findIndex(user => user.id == e.target.id)
+        users.splice(index, 1)
+        console.log(users)
+      }
+    })
+}
+
+const handleSubmit = e => {
+    
+    e.preventDefault()
+
+    const newUser = {
+        name: document.querySelector('#name').value,
+        email: document.querySelector('#email').value,
+        company: {
+            name: document.querySelector('#company').value,
+        }
+    }
+    console.log(newUser);
+    fetch(BASE_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+            users.push(data)
+            const userElement = createUserElement(data)
+            userList
+            listUsers()
+        })
+}
+
+userList.addEventListener('click', removeUser)
+form.addEventListener('submit', handleSubmit)
